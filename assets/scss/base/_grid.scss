@@ -1,0 +1,133 @@
+// vendoring libraries
+    @use "sass:math";
+    @use "sass:map";
+// declaration
+    $grid-column-base: 12;
+    $grid-gutter-default: 30px;
+    $grid-breakpoints: (
+        xs: 0,
+        sm: 576px,
+        md: 768px,
+        lg: 992px,
+        xl: 1200px,
+        xxl: 1400px
+    );
+    $container-max-widths: (
+        xs: null,
+        sm: 540px,
+        md: 720px,
+        lg: 960px,
+        xl: 1140px,
+        xxl: 1320px
+    );
+    $gutter-list: (
+        xs: 10px,
+        sm: 10px,
+        md: 15px,
+        lg: 15px,
+        xl: 30px,
+        xxl: 30px
+    );
+// mixin 
+    @mixin responsive-option($bp, $dm) {
+        @if ($bp=="xs") {
+            @content;
+        }
+        @else {
+            @media all and (min-width: $dm) {
+                @content;
+            }
+        }
+    }
+
+    @mixin gutter($option: "") {
+        width: 100%;
+        @if ($option=="full") {
+            padding-left: $grid-gutter-default * 0.5; padding-right: $grid-gutter-default * 0.5;
+        } @else {
+            @each $bp, $dm in $grid-breakpoints {
+                @include responsive-option($bp, $dm) {
+                    padding-left: map.get($gutter-list, $bp) * 0.5;
+                    padding-right: map.get($gutter-list, $bp) * 0.5;
+                }
+            }
+        }
+    }
+    @mixin margin($option: "") {
+        // margin-left: -$grid-gutter-default * 0.5; margin-right: -$grid-gutter-default * 0.5;
+        @if ($option=="full") {
+            margin-left: -$grid-gutter-default * 0.5; margin-right: -$grid-gutter-default * 0.5;
+        } @else {
+            @each $bp, $dm in $grid-breakpoints {
+                @include responsive-option($bp, $dm) {
+                    margin-left: map.get($gutter-list, $bp) * -0.5;
+                    margin-right: map.get($gutter-list, $bp) * -0.5;
+                }
+            }
+        }
+    }
+
+// real code here
+    %container {
+        margin-left: auto; margin-right: auto;
+        @include gutter();
+    } 
+    .container {
+        @extend %container;
+        &-fluid {
+            @extend %container;
+        }
+    }
+
+    .row {
+        display: flex; flex-wrap: wrap;
+        @include margin();
+        //.row > .col (by default)
+        > * {
+            flex: 1 0;
+            @include gutter();
+        }
+        //.row-cols-{??}-1 > .col
+        @each $bp, $dm in $grid-breakpoints {
+            @include responsive-option($bp, $dm) {
+                $include-bp: if($bp!=xs,"-"+$bp,"");
+                @for $i from 1 through 6 {
+                    &-cols#{$include-bp}-#{$i} > * {
+                        flex: 0 0 auto;
+                        width: calc(100% / #{$i});
+                    }
+                }
+            }
+        }
+    }
+
+    @each $bp, $dm in $grid-breakpoints {
+        @include responsive-option($bp, $dm) {
+            .container {
+                max-width: map.get($container-max-widths, $bp);
+            }
+        // }
+        // @include responsive-option($bp, $dm) {
+            $include-bp: if($bp!=xs,"-"+$bp,"");
+            @for $i from 1 through 12 {
+                .col#{$include-bp}-#{$i} {
+                    flex: 0 0 auto;
+                    width: calc(100% / #{$grid-column-base} * #{$i});
+                }
+            }
+
+            @for $i from 0 through 11 {
+                .offset#{$include-bp}-#{$i} {
+                    margin-left: calc(100% / #{$grid-column-base} * #{$i});
+                }
+            }
+
+            .g#{$include-bp}-0 {
+                margin-left: 0;margin-right: 0;
+                > * {
+                    padding-left: 0; padding-right: 0;
+                }
+            }
+
+        }
+    }

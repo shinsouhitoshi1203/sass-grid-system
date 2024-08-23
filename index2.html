@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/css/index.css">
+    <style>
+
+.card {
+  height: 100px;
+  background-color: lightgrey;
+  color: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}</style>
+</head>
+<body>
+  <div class="container">
+    <h2>Bootstrap-style i.e. define layout on children</h2>
+    <div class="row">
+      <div class="col-12 col-lg-3">
+        <div class="card">col-12<br>col-lg-3</div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card">col-6<br>col-lg-3</div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card">col-6<br>col-lg-3</div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card">col-6<br>col-lg-3</div>
+      </div>
+      <div class="col-6 col-lg-12">
+        <div class="card">col-6<br>col-lg-3</div>
+      </div>
+    </div>
+    <h3>CSS Grid-style i.e. define layout on the parent</h3>
+    <h2>col-1 col-lg-2</h2>
+    <div class="row row-cols-1 row-cols-lg-2">
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+    </div>
+    <h2>Mixing the two</h2>
+    <h2>col-3</h2>
+    <div class="row row-cols-3">
+      <div class="col-8">
+        <div class="card">col-8</div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div class="col-8">
+        <div class="card">col-8</div>
+      </div>
+      <div class="col-9">
+        <div class="card">col-9</div>
+      </div>
+      <div class="col-3">
+        <div class="card">col-3</div>
+      </div>
+    </div>
+    <h2>.auto-fit modifier</h2>
+    <div class="row auto-fit">
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+    </div>
+    <p>To illustrate difference between auto-fit and auto-fill:</p>
+    <div class="row auto-fit">
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+    </div>
+    <h2>.auto-fill modifier</h2>
+    <div class="row auto-fill">
+      <div>
+        <div class="card"></div>
+      </div>
+      <div>
+        <div class="card"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
