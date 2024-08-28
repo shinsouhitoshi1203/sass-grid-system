@@ -28,6 +28,15 @@
         xl: 30px,
         xxl: 30px
     );
+    $gutters: (
+        0: 0,
+        1: 0.25,
+        2: 0.5,
+        3: 1,
+        4: 1.5,
+        5: 3,
+    );
+
 // mixin 
     @mixin responsive-option($bp, $dm) {
         @if ($bp=="xs") {
@@ -40,40 +49,24 @@
         }
     }
 
-    @mixin gutter($option: "") {
-        width: 100%;
-        @if ($option=="full") {
-            padding-left: $grid-gutter-default * 0.5; padding-right: $grid-gutter-default * 0.5;
-        } @else {
-            @each $bp, $dm in $grid-breakpoints {
-                @include responsive-option($bp, $dm) {
-                    padding-left: map.get($gutter-list, $bp) * 0.5;
-                    padding-right: map.get($gutter-list, $bp) * 0.5;
-                }
-            }
-        }
+    %gutter-option {
+        padding-left: calc(var(--gutter-x) * 0.5); padding-right: calc(var(--gutter-x) * 0.5);
     }
-    @mixin margin($option: "") {
-        // margin-left: -$grid-gutter-default * 0.5; margin-right: -$grid-gutter-default * 0.5;
-        @if ($option=="full") {
-            margin-left: -$grid-gutter-default * 0.5; margin-right: -$grid-gutter-default * 0.5;
-        } @else {
-            @each $bp, $dm in $grid-breakpoints {
-                @include responsive-option($bp, $dm) {
-                    margin-left: map.get($gutter-list, $bp) * -0.5;
-                    margin-right: map.get($gutter-list, $bp) * -0.5;
-                }
-            }
-        }
+    %prevent-padding {
+        margin-left: calc(var(--gutter-x) * -0.5); 
+        margin-right: calc(var(--gutter-x) * -0.5);
+        margin-top: calc(var(--gutter-y) * -1);
     }
-
 // real code here
     %container {
+        width: 100%;
+        --gutter-x: #{$grid-gutter-default * 1};
+        --gutter-y: #{$grid-gutter-default * 0};
         margin-left: auto; margin-right: auto;
-        @include gutter();
     } 
     .container {
         @extend %container;
+        @extend %gutter-option;
         &-fluid {
             @extend %container;
         }
@@ -81,11 +74,12 @@
 
     .row {
         display: flex; flex-wrap: wrap;
-        @include margin();
+        @extend %prevent-padding;
         //.row > .col (by default)
         > * {
             flex: 1 0;
-            @include gutter();
+            @extend %gutter-option;
+            margin-top: var(--gutter-y);
         }
         //.row-cols-{??}-1 > .col
         @each $bp, $dm in $grid-breakpoints {
@@ -103,12 +97,13 @@
 
     @each $bp, $dm in $grid-breakpoints {
         @include responsive-option($bp, $dm) {
+            //identify breakpoints
+            $include-bp: if($bp!=xs,"-"+$bp,"");
+            // container
             .container {
                 max-width: map.get($container-max-widths, $bp);
             }
-        // }
-        // @include responsive-option($bp, $dm) {
-            $include-bp: if($bp!=xs,"-"+$bp,"");
+            // .col-x
             @for $i from 1 through 12 {
                 .col#{$include-bp}-#{$i} {
                     flex: 0 0 auto;
@@ -122,11 +117,13 @@
                 }
             }
 
-            .g#{$include-bp}-0 {
-                margin-left: 0;margin-right: 0;
-                > * {
-                    padding-left: 0; padding-right: 0;
+            @each $i, $value in $gutters {
+                .gx#{$include-bp}-#{$i}, .g#{$include-bp}-#{$i} {
+                    --gutter-x: calc(#{$grid-gutter-default * map.get($gutters, $i)});
                 }
+                .gy#{$include-bp}-#{$i}, .g#{$include-bp}-#{$i} {
+                    --gutter-y: calc(#{$grid-gutter-default * map.get($gutters, $i)});
+                }       
             }
 
         }
