@@ -57,6 +57,34 @@
         margin-right: calc(var(--gutter-x) * -0.5);
         margin-top: calc(var(--gutter-y) * -1);
     }
+
+    // components
+    @mixin cols($include-bp) {
+        @for $i from 1 through 12 {
+            .col#{$include-bp}-#{$i} {
+                flex: 0 0 auto;
+                width: calc(100% / #{$grid-column-base} * #{$i});
+            }
+        }
+    }
+    @mixin offset($include-bp) {
+        @for $i from 0 through 11 {
+            .offset#{$include-bp}-#{$i} {
+                margin-left: calc(100% / #{$grid-column-base} * #{$i});
+            }
+        }
+    }
+    @mixin gutter($include-bp) {
+        @each $i, $value in $gutters {
+            .gx#{$include-bp}-#{$i}, .g#{$include-bp}-#{$i} {
+                --gutter-x: calc(#{$grid-gutter-default * map.get($gutters, $i)});
+            }
+            .gy#{$include-bp}-#{$i}, .g#{$include-bp}-#{$i} {
+                --gutter-y: calc(#{$grid-gutter-default * map.get($gutters, $i)});
+            }       
+        }
+    }
+
 // real code here
     %container {
         width: 100%;
@@ -100,31 +128,10 @@
             //identify breakpoints
             $include-bp: if($bp!=xs,"-"+$bp,"");
             // container
-            .container {
-                max-width: map.get($container-max-widths, $bp);
-            }
-            // .col-x
-            @for $i from 1 through 12 {
-                .col#{$include-bp}-#{$i} {
-                    flex: 0 0 auto;
-                    width: calc(100% / #{$grid-column-base} * #{$i});
-                }
-            }
-
-            @for $i from 0 through 11 {
-                .offset#{$include-bp}-#{$i} {
-                    margin-left: calc(100% / #{$grid-column-base} * #{$i});
-                }
-            }
-
-            @each $i, $value in $gutters {
-                .gx#{$include-bp}-#{$i}, .g#{$include-bp}-#{$i} {
-                    --gutter-x: calc(#{$grid-gutter-default * map.get($gutters, $i)});
-                }
-                .gy#{$include-bp}-#{$i}, .g#{$include-bp}-#{$i} {
-                    --gutter-y: calc(#{$grid-gutter-default * map.get($gutters, $i)});
-                }       
-            }
-
+            .container { max-width: map.get($container-max-widths, $bp); }
+            // .col-1
+            @include cols($include-bp);
+            @include offset($include-bp);
+            @include gutter($include-bp);
         }
     }
