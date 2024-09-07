@@ -6,8 +6,15 @@
 	`@import "sass:math"`
 	
 	`@import "sass:map"`
+	
+3. Before starting to work, please decide which sort of responsive you are going to do: `desktop first`, or `mobile first` ?
 
-## 1. Initialize variables, breakpoints and gutter ratio.
+## 1. Initialize variables, breakpoints, gutter and ratio.
+> For `mobile first`, please use `min-width`
+
+> For `desktop first`, please use `max-width` and re-arrange the index of list
+
+### a. for Mobile first
 ```scss
 $grid-breakpoints: (
     xs: 0,
@@ -24,6 +31,27 @@ $container-max-widths: (
     xl: 1140px,
     xxl: 1320px,
 );
+```
+### b. for Desktop first 
+```scss
+$grid-breakpoints: (
+    xxl: 1400px,
+    xl: 1200px,
+    lg: 992px,
+    md: 768px,
+    sm: 576px,
+    xs: 0
+);
+$container-max-widths: (
+    sm: 100%,
+    md: 540px,
+    lg: 720px,
+    xl: 960px,
+    xxl: 1170px,
+);
+```
+### c. Gutters and ratios
+```scss
 $grid-columns: 12;
 $grid-gutter-width: 30px;
 $gutters: (
