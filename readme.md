@@ -36,12 +36,12 @@ $container-max-widths: (
 ### b. for Desktop first 
 ```scss
 $grid-breakpoints: (
+    xs: 0,
     xxl: 1400px,
     xl: 1200px,
     lg: 992px,
     md: 768px,
-    sm: 576px,
-    xs: 0
+    sm: 576px
 );
 $container-max-widths: (
     sm: 100%,
